@@ -1,0 +1,22 @@
+# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: Apache-2.0
+---
+include:
+  project: "bmi/opendesk/tooling/gitlab-config"
+  ref: "v2.4.6"
+  file:
+    - "ci/common/lint.yml"
+    - "ci/helm/helm-lint.yml"
+    - "ci/helm/helm-release.yml"
+
+stages:
+  - ".pre"
+  - "lint"
+  - "docs"
+  - "package"
+  - "publish"
+  - ".post"
+
+.common:
+  tags: []
+...
