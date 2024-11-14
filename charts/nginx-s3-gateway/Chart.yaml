@@ -17,5 +17,5 @@ name: "nginx-s3-gateway"
 sources:
   - "https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/nginx-s3-gateway"
 type: "application"
-version: "1.0.0"
+version: "1.0.1"
 ...

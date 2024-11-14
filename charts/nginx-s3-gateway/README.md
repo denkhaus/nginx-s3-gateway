@@ -1,6 +1,6 @@
 # nginx-s3-gateway
 
-![Version: 0.0.1](https://img.shields.io/badge/Version-0.0.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 1.0.0](https://img.shields.io/badge/Version-1.0.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 A Helm chart deploying NGINX S3 Caching Gateway
 
@@ -43,9 +43,9 @@ A Helm chart deploying NGINX S3 Caching Gateway
 | containerSecurityContext.capabilities | object | `{"drop":["ALL"]}` | Security capabilities for container. |
 | containerSecurityContext.enabled | bool | `true` | Enable security context. |
 | containerSecurityContext.readOnlyRootFilesystem | bool | `true` | Mounts the container's root filesystem as read-only. |
-| containerSecurityContext.runAsGroup | int | `1000` | Process group id. |
+| containerSecurityContext.runAsGroup | int | `101` | Process group id. |
 | containerSecurityContext.runAsNonRoot | bool | `true` | Run container as a user. |
-| containerSecurityContext.runAsUser | int | `1000` | Process user id. |
+| containerSecurityContext.runAsUser | int | `101` | Process user id. |
 | containerSecurityContext.seccompProfile.type | string | `"RuntimeDefault"` | Disallow custom Seccomp profile by setting it to RuntimeDefault. |
 | extraEnvVars | list | `[]` | Array with extra environment variables to add to containers.  extraEnvVars:   - name: FOO     value: "bar"  |
 | extraVolumeMounts | list | `[]` | Optionally specify an extra list of additional volumeMounts. |
@@ -79,7 +79,7 @@ A Helm chart deploying NGINX S3 Caching Gateway
 | podAnnotations | object | `{}` | Pod Annotations. Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/ |
 | podLabels | object | `{}` | Pod Labels. Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/ |
 | podSecurityContext.enabled | bool | `true` | Enable security context. |
-| podSecurityContext.fsGroup | int | `1000` | If specified, all processes of the container are also part of the supplementary group. |
+| podSecurityContext.fsGroup | int | `101` | If specified, all processes of the container are also part of the supplementary group. |
 | podSecurityContext.fsGroupChangePolicy | string | `"Always"` | Change ownership and permission of the volume before being exposed inside a Pod. |
 | readinessProbe.enabled | bool | `true` | Enables kubernetes ReadinessProbe. |
 | readinessProbe.failureThreshold | int | `10` | Number of failed executions until container is terminated. |
@@ -94,8 +94,8 @@ A Helm chart deploying NGINX S3 Caching Gateway
 | resources.requests.memory | string | `"128Mi"` | The number of RAM which has to be available on the scheduled node. |
 | service.annotations | object | `{}` | Additional custom annotations. |
 | service.enabled | bool | `true` | Enable kubernetes service creation. |
-| service.ports.gateway.containerPort | int | `80` | Internal port. |
-| service.ports.gateway.port | int | `80` | Accessible port. |
+| service.ports.gateway.containerPort | int | `8080` | Internal port. |
+| service.ports.gateway.port | int | `8080` | Accessible port. |
 | service.ports.gateway.protocol | string | `"TCP"` | service protocol. |
 | service.type | string | `"ClusterIP"` | Choose the kind of Service, one of "ClusterIP", "NodePort" or "LoadBalancer". |
 | serviceAccount.annotations | object | `{}` | Additional custom annotations for the ServiceAccount. |
