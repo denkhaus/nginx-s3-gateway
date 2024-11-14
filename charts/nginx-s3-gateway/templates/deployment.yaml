@@ -69,46 +69,10 @@ spec:
           image: "{{ coalesce .Values.image.registry .Values.global.imageRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.imagePullPolicy }}
           env:
-          {{- with .Values.configuration.bucket }}
-            - name: "S3_BUCKET_NAME"
-              value: {{ . | quote }}
-          {{- end }}
-          {{- with .Values.configuration.endpoint }}
-            - name: "S3_SERVER"
-              value: {{ . | quote }}
-          {{- end }}
-          {{- with .Values.configuration.port }}
-            - name: "S3_SERVER_PORT"
-              value: {{ . | quote }}
-          {{- end }}
-          {{- with .Values.configuration.protocol }}
-            - name: "S3_SERVER_PROTO"
-              value: {{ . | quote }}
-          {{- end }}
-          {{- with .Values.configuration.region }}
-            - name: "AWS_REGION"
-              value: {{ . | quote }}
-          {{- end }}
-          {{- with .Values.configuration.style }}
-            - name: "S3_STYLE"
-              value: {{ . | quote }}
-          {{- end }}
-          {{- with .Values.configuration.version }}
-            - name: "AWS_SIGS_VERSION"
-              value: {{ . | quote }}
-          {{- end }}
-          {{- with .Values.configuration.allowDirectoryListing }}
             - name: "ALLOW_DIRECTORY_LIST"
-              value: {{ . | quote }}
-          {{- end }}
-          {{- with .Values.configuration.provideIndexPage }}
-            - name: "PROVIDE_INDEX_PAGE"
-              value: {{ . | quote }}
-          {{- end }}
-          {{- with .Values.configuration.debug }}
-            - name: "DEBUG"
-              value: {{ . | quote }}
-          {{- end }}
+              value: {{ .Values.configuration.allowDirectoryListing | quote }}
+            - name: "AWS_SIGS_VERSION"
+              value: {{ .Values.configuration.version | quote }}
             - name: "AWS_ACCESS_KEY_ID"
               valueFrom:
                 secretKeyRef:
@@ -119,12 +83,28 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.configuration.credentials.secretKey.existingSecret.name | default (include "common.names.fullname" .) }}
                   key: {{ .Values.configuration.credentials.secretKey.existingSecret.key | default "secretKey" }}
+            - name: "S3_BUCKET_NAME"
+              value: {{ .Values.configuration.bucket | quote }}
+            - name: "S3_REGION"
+              value: {{ .Values.configuration.region | quote }}
+            - name: "S3_SERVER_PORT"
+              value: {{ .Values.configuration.port | quote }}
+            - name: "S3_SERVER_PROTO"
+              value: {{ .Values.configuration.protocol | quote }}
+            - name: "S3_SERVER"
+              value: {{ .Values.configuration.endpoint | quote }}
+            - name: "S3_STYLE"
+              value: {{ .Values.configuration.style | quote }}
+            - name: "PROVIDE_INDEX_PAGE"
+              value: {{ .Values.configuration.provideIndexPage | quote }}
+            - name: "DEBUG"
+              value: {{ .Values.configuration.debug | quote }}
           {{- with .Values.extraEnvVars }}
             {{- . | toYaml | nindent 12 }}
           {{- end }}
           livenessProbe:
             httpGet:
-              path: "/"
+              path: "/health"
               port: {{ .Values.service.ports.gateway.containerPort }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
@@ -133,7 +113,7 @@ spec:
             successThreshold: {{ .Values.livenessProbe.successThreshold }}
           readinessProbe:
             httpGet:
-              path: "/"
+              path: "/health"
               port: {{ .Values.service.ports.gateway.containerPort }}
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
@@ -153,10 +133,37 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" .) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: "tmp"
+              mountPath: "/tmp"
+            - name: "cache"
+              mountPath: "/var/cache/nginx"
+            - name: "conf"
+              mountPath: "/etc/nginx/conf.d"
+            - name: "server-variables"
+              mountPath: "/etc/nginx/templates/gateway/server_variables.conf.template"
+              subPath: "server_variables.conf.template"
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" .) | nindent 12 }}
             {{- end }}
       volumes:
+        - name: "tmp"
+          emptyDir:
+            medium: "Memory"
+            sizeLimit: "100Mi"
+        - name: "cache"
+          emptyDir:
+            medium: "Memory"
+            sizeLimit: "100Mi"
+        - name: "conf"
+          emptyDir:
+            medium: "Memory"
+            sizeLimit: "1Mi"
+        - name: "server-variables"
+          configMap:
+            name: {{ include "common.names.fullname" . }}
+            items:
+              - key: "server_variables.conf.template"
+                path: "server_variables.conf.template"
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes  "context" .) | nindent 8 }}
         {{- end }}

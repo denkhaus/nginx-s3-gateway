@@ -2,10 +2,9 @@
 SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 SPDX-License-Identifier: Apache-2.0
 */}}
-{{- if not (and .Values.configuration.credentials.accessKey.existingSecret.name .Values.configuration.credentials.secretKey.existingSecret.name) }}
 ---
 apiVersion: "v1"
-kind: "Secret"
+kind: "ConfigMap"
 metadata:
   name: "{{ include "common.names.fullname" . }}"
   namespace: {{ include "common.names.namespace" . | quote }}
@@ -18,8 +17,15 @@ metadata:
     {{- if .Values.additionalAnnotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.additionalAnnotations "context" . ) | nindent 4 }}
     {{- end }}
-stringData:
-  accessKey: {{ .Values.configuration.credentials.accessKey.value }}
-  secretKey: {{ .Values.configuration.credentials.secretKey.value }}
+data:
+  server_variables.conf.template: |
+    # Variable indicating to the awssig4.js script that singing key
+    # caching is turned off. This feature uses the keyval store, so it
+    # is only enabled when using NGINX Plus.
+    set $cache_signing_key_enabled 0;
+
+    # Variable indicating to the awscredentials.js script that session token
+    # caching is turned on. This feature uses the keyval store, so it
+    # is only enabled when using NGINX Plus.
+    set $cache_instance_credentials_enabled 0;
 ...
-{{- end }}

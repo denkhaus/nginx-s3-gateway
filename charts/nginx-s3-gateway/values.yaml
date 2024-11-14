@@ -86,9 +86,6 @@ configuration:
         # -- Key in secret containing the secret key.
         key: ""
 
-
-
-
 # Security Context.
 # Ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 containerSecurityContext:
@@ -104,10 +101,10 @@ containerSecurityContext:
   enabled: true
 
   # -- Process user id.
-  runAsUser: 1000
+  runAsUser: 101
 
   # -- Process group id.
-  runAsGroup: 1000
+  runAsGroup: 101
 
   # Set Seccomp profile.
   seccompProfile:
@@ -252,7 +249,7 @@ podSecurityContext:
   enabled: true
 
   # -- If specified, all processes of the container are also part of the supplementary group.
-  fsGroup: 1000
+  fsGroup: 101
 
   # -- Change ownership and permission of the volume before being exposed inside a Pod.
   fsGroupChangePolicy: "Always"
@@ -319,9 +316,9 @@ service:
   ports:
     gateway:
       # -- Accessible port.
-      port: 80
+      port: 8080
       # -- Internal port.
-      containerPort: 80
+      containerPort: 8080
       # -- service protocol.
       protocol: "TCP"
 
