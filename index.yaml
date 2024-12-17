@@ -1,0 +1,25 @@
+apiVersion: v1
+entries:
+  nginx-s3-gateway:
+  - annotations:
+      category: Security
+      licenses: Apache-2.0
+    apiVersion: v2
+    created: "2024-12-17T13:19:54.563627093Z"
+    dependencies:
+    - name: common
+      repository: oci://registry.opencode.de/bmi/opendesk/components/external/charts/bitnami-charts
+      version: ^2.x.x
+    description: A Helm chart deploying NGINX S3 Caching Gateway
+    digest: 0e97063d53e1f97e483b26e679decad59d75d4c2121d2c66a787fd5b8b139bc4
+    home: https://zendis.de
+    keywords:
+    - security
+    name: nginx-s3-gateway
+    sources:
+    - https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/nginx-s3-gateway
+    type: application
+    urls:
+    - https://github.com/denkhaus/nginx-s3-gateway/releases/download/nginx-s3-gateway-1.0.1/nginx-s3-gateway-1.0.1.tgz
+    version: 1.0.1
+generated: "2024-12-17T13:19:54.563690281Z"
