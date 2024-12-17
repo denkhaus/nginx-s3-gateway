@@ -1,22 +1,22 @@
-<!--
-SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
-SPDX-License-Identifier: Apache-2.0
--->
-# NGINX S3 Caching Gateway Helm Chart
+<!-- SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH SPDX-License-Identifier: Apache-2.0 -->
 
-A Helm chart for deploying NGINX S3 Caching Gateway.
+## Usage
 
-## Prerequisites
+[Helm](https://helm.sh) must be installed to use the charts. Please refer to
+Helm's [documentation](https://helm.sh/docs) to get started.
 
-Before you begin, ensure you have met the following requirements:
+Once Helm has been set up correctly, add the repo as follows:
 
-- Kubernetes 1.21+
-- Helm 3.0.0+
+helm repo add denkhaus https://denkhaus.github.io/helm-charts
 
-## License
+If you had already added this repo earlier, run `helm repo update` to retrieve
+the latest versions of the packages. You can then run `helm search repo
+denkhaus` to see the charts.
 
-This project uses the following license: Apache-2.0
+To install the nginx-s3-gateway chart:
 
-## Copyright
+    helm install my-nginx-s3-gateway denkhaus/nginx-s3-gateway
 
-Copyright © 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+To uninstall the chart:
+
+    helm delete my-nginx-s3-gateway
